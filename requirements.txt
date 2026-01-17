@@ -3,5 +3,3 @@ playwright
 beautifulsoup4
 pydantic
 
-# playwright install chromium
-playwright install

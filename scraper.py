@@ -16,10 +16,18 @@ class JobScraper:
         """
         with sync_playwright() as p:
             # Launch browser with flags to avoid HTTP/2 protocol errors (fix for some sites)
-            browser = p.chromium.launch(
-                headless=True,
-                args=["--disable-http2"]
-            )
+            try:
+                browser = p.chromium.launch(
+                    headless=True,
+                    args=["--disable-http2"]
+                )
+            except Exception:
+                # Fallback for Streamlit Cloud (uses system installed chromium)
+                browser = p.chromium.launch(
+                    executable_path="/usr/bin/chromium",
+                    headless=True,
+                    args=["--disable-http2"]
+                )
             
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
